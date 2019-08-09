@@ -24,6 +24,19 @@ These are [integration tests, not unit tests](https://ardalis.com/unit-test-or-i
 - Make sure you have `dotnet ef` installed. [Learn more](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet).
 	- `$ dotnet tool install --global dotnet-ef --version 3.0.0-*`
 - Run `dotnet ef database update`
-- Run the tests `dotnet test`
+- Run the tests (`dotnet test`)
 
+## Testing with 3.x
 
+- Swap out the packages
+- You'll initially get `System.InvalidOperationException : The type 'Limb' cannot be marked as owned because a non-owned entity type with the same name already exists.` You can get around this by commenting out these lines in MyDbContext.cs:
+```
+    //modelBuilder.Entity<Limb>()
+    //    .HasKey(l => l.Id);
+```
+(for some reason migrations were complaining about Limb not having a key until we added this)
+
+With the preview7 build you'll see that the owned entities are never loaded, even when explicitly included.
+
+2.x requires the Limb .HasKey code or else you get this:
+`System.InvalidOperationException : The entity type 'Limb' requires a primary key to be defined.`

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EFOwnedEntities.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20190809151121_Initial")]
+    [Migration("20190809170238_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,6 +78,22 @@ namespace EFOwnedEntities.Migrations
                             b1.HasOne("EFOwnedEntities.Monster")
                                 .WithMany("Limbs")
                                 .HasForeignKey("MonsterId")
+                                .OnDelete(DeleteBehavior.Cascade);
+                        });
+
+                    b.OwnsOne("EFOwnedEntities.Tail", "Tail", b1 =>
+                        {
+                            b1.Property<int>("MonsterId");
+
+                            b1.Property<string>("Description");
+
+                            b1.HasKey("MonsterId");
+
+                            b1.ToTable("Tails");
+
+                            b1.HasOne("EFOwnedEntities.Monster")
+                                .WithOne("Tail")
+                                .HasForeignKey("EFOwnedEntities.Tail", "MonsterId")
                                 .OnDelete(DeleteBehavior.Cascade);
                         });
                 });

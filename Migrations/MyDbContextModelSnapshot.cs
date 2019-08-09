@@ -78,6 +78,22 @@ namespace EFOwnedEntities.Migrations
                                 .HasForeignKey("MonsterId")
                                 .OnDelete(DeleteBehavior.Cascade);
                         });
+
+                    b.OwnsOne("EFOwnedEntities.Tail", "Tail", b1 =>
+                        {
+                            b1.Property<int>("MonsterId");
+
+                            b1.Property<string>("Description");
+
+                            b1.HasKey("MonsterId");
+
+                            b1.ToTable("Tails");
+
+                            b1.HasOne("EFOwnedEntities.Monster")
+                                .WithOne("Tail")
+                                .HasForeignKey("EFOwnedEntities.Tail", "MonsterId")
+                                .OnDelete(DeleteBehavior.Cascade);
+                        });
                 });
 
             modelBuilder.Entity("EFOwnedEntities.Owner", b =>

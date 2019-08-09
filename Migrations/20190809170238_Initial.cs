@@ -63,6 +63,24 @@ namespace EFOwnedEntities.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Tails",
+                columns: table => new
+                {
+                    MonsterId = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tails", x => x.MonsterId);
+                    table.ForeignKey(
+                        name: "FK_Tails_Monsters_MonsterId",
+                        column: x => x.MonsterId,
+                        principalTable: "Monsters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Limb_MonsterId",
                 table: "Limb",
@@ -81,6 +99,9 @@ namespace EFOwnedEntities.Migrations
 
             migrationBuilder.DropTable(
                 name: "Owners");
+
+            migrationBuilder.DropTable(
+                name: "Tails");
 
             migrationBuilder.DropTable(
                 name: "Monsters");

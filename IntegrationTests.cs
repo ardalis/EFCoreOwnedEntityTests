@@ -25,11 +25,14 @@ namespace EFOwnedEntities
 
             _dbContext = new MyDbContext(builder.Options);
             _dbContext.Database.Migrate();
+
+            Seed();
         }
 
-        [Fact(Skip ="Only run this manually to seed the database")] 
-        public void Seed()
+        private void Seed()
         {
+            if (_dbContext.Monsters.Any()) return;
+
             var owner = new Owner { Name = "Steve" };
             _dbContext.Owners.Add(owner);
             _dbContext.SaveChanges();
@@ -48,11 +51,14 @@ namespace EFOwnedEntities
                         Length = 5
                     },
                 },
-                Owners = new List<Owner>() { owner}
+                Owners = new List<Owner>() { owner},
+                Tail = new Tail { Description="Long and spiky"}
             };
             _dbContext.Monsters.Add(monster);
             _dbContext.SaveChanges();
         }
+
+        // OwnsMany Tests
 
         [Fact]
         public void GetMonsterPopulatesLimbs()
@@ -74,6 +80,28 @@ namespace EFOwnedEntities
             Assert.Equal(2, monster.Limbs.Count);
 
         }
+
+        // OwnsOne Tests
+
+        [Fact]
+        public void GetMonsterPopulatesTail()
+        {
+            var monster = _dbContext.Monsters.FirstOrDefault();
+
+            Assert.NotNull(monster.Tail);
+        }
+
+        [Fact]
+        public void GetMonsterPopulatesTailWithInclude()
+        {
+            var monster = _dbContext.Monsters
+                .Include(m => m.Tail)
+                .FirstOrDefault();
+
+            Assert.NotNull(monster.Tail);
+        }
+
+        // HasMany Tests
 
         [Fact]
         public void GetMonsterDoesNotPopulatesOwners()

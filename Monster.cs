@@ -9,6 +9,7 @@ namespace EFOwnedEntities
         public bool IsScary { get; set; }
         public string Color { get; set; }
 
+        public Tail Tail { get; set; }
         public List<Limb> Limbs { get; set; }
         public List<Owner> Owners { get; set; }
     }
@@ -18,6 +19,11 @@ namespace EFOwnedEntities
         public int Id { get; set; }
         public string Covering { get; set; }
         public int Length { get; set; }
+    }
+
+    public class Tail
+    {
+        public string Description { get; set; }
     }
 
     public class Owner

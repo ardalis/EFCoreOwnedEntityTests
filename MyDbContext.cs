@@ -27,12 +27,14 @@ namespace EFOwnedEntities
                 .HasKey(l => l.Id);
 
             modelBuilder.Entity<Monster>()
+                .OwnsOne(m => m.Tail)
+                .ToTable("Tails");
+
+            modelBuilder.Entity<Monster>()
                 .OwnsMany(m => m.Limbs);
-//                .ToTable("Limb");
         }
 
         public DbSet<Monster> Monsters { get; set; }
         public DbSet<Owner> Owners { get; set; }
-        //public DbSet<Limb> Limbs { get; set; }
     }
 }
